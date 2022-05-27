@@ -43,17 +43,17 @@ jobs:
           x: false
           race: false
           ldflags: -s -w 
-          buildmode: c-shared 
+          buildmode: c-archive
           working_dir: ${{ github.workspace }}/lib-net          
 
       - name: Archive file
-        run:  tar cvf $GITHUB_WORKSPACE/c-shared-lib.tar -C $GITHUB_WORKSPACE/lib-net/build/lib .
+        run:  tar cvf $GITHUB_WORKSPACE/c-archive.tar -C $GITHUB_WORKSPACE/lib-net/build/lib .
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/') 
         with:
           files: |
-            ${{ github.workspace }}/c-shared-lib.ta
+            ${{ github.workspace }}/c-archive.tar
             ${{ github.workspace }}/lib-net/build/rfu-net-lib-windows-10.0-amd64.exe 
             ${{ github.workspace }}/lib-net/build/rfu-net-lib-windows-10.0-386.exe
             ${{ github.workspace }}/lib-net/build/rfu-net-lib-linux-arm64 
