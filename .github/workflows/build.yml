@@ -45,7 +45,11 @@ jobs:
           ldflags: -s -w 
           buildmode: c-archive
           working_dir: ${{ github.workspace }}/lib-net          
-
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: release
+          path: ${{ github.workspace }}/lib-net/build/**/*
       - name: Archive file
         run:  tar cvf $GITHUB_WORKSPACE/c-archive.tar -C $GITHUB_WORKSPACE/lib-net/build/lib .
       - name: Release
