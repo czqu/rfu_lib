@@ -62,14 +62,14 @@ jobs:
       - name: Upload PE artifact
         uses: actions/upload-artifact@v3
         with:
-          name: release
+          name: PE-artifact
           path: |
             ${{ github.workspace }}/lib-net/build/**/*
             !${{ github.workspace }}/lib-net/build/lib/**/* 
       - name: Upload lib artifact
         uses: actions/upload-artifact@v3
         with:
-          name: release
+          name: Lib-artifact
           path: ${{ github.workspace }}/lib-net/build/lib/**/*                 
       - name: Archive file
         run:  tar cvf $GITHUB_WORKSPACE/c-archive.tar -C $GITHUB_WORKSPACE/lib-net/build/lib .
