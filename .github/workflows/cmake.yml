@@ -25,8 +25,7 @@ jobs:
 
       - name: Install CMake and Ninja
         run: choco install -y cmake ninja
-      - name: ls
-        run: ls
+
       - name: Create build directory
         run: |
           mkdir -p ${{ github.workspace }}/build
@@ -37,7 +36,8 @@ jobs:
 
       - name: Build
         run: cmake --build .
-
+      - name: ls
+        run: ls
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
