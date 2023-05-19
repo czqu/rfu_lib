@@ -23,7 +23,7 @@ jobs:
         uses: crazy-max/ghaction-xgo@v2
         with:
           xgo_version: latest
-          go_version: 1.20.4
+          go_version: latest
           dest: build/lib
           prefix: rfu-net-shared-lib
           targets: windows-10.0/amd64, windows-10.0/386 , windows-10.0/arm64 #,linux/amd64,linux/386,linux/arm64,darwin-10.16/arm64,darwin-10.16/amd64
