@@ -15,6 +15,7 @@ jobs:
         with:
           repository: voidbytes/RemoteFingerUnlockModule
           ref: master
+          token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
 
       - name: Add MSBuild to PATH
         uses: microsoft/setup-msbuild@v1.1
