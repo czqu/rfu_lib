@@ -17,16 +17,19 @@ jobs:
           token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
           ref: main
 
-      - name: Set up MSBuild
-        uses: microsoft/setup-msbuild@v1.1
+      - name: Set up MSYS2
+        uses: actions/setup-msys2@v2
+
+      - name: Install dependencies
+        run: pacman -Syu --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake mingw-w64-x86_64-ninja
 
       - name: Create build directory
         run: |
-          mkdir ${{ github.workspace }}/build
+          mkdir -p ${{ github.workspace }}/build
           cd ${{ github.workspace }}/build
 
       - name: Configure CMake
-        run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build
+        run: cmake -G "Ninja" ..
 
       - name: Build
-        run: cmake --build ${{ github.workspace }}/build --config Release
+        run: cmake --build .
