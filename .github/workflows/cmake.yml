@@ -1,9 +1,10 @@
-name: cmake
+
 
 on:
   push:
     branches:
       - main
+name: cmake
 
 jobs:
   build:
@@ -38,8 +39,8 @@ jobs:
         run: cmake --build .
 
       - name: Upload Artifact
-         uses: actions/upload-artifact@v2
-         with:
+        uses: actions/upload-artifact@v2
+        with:
             name: PasswordProvider
             path: |
                  ${{ github.workspace }}/build/PasswordProvider_arm64.dll
