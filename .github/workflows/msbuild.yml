@@ -1,0 +1,47 @@
+name: Build and Upload
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          repository: voidbytes/RemoteFingerUnlockModule
+
+      - name: Add MSBuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: Restore NuGet packages
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: nuget restore ${{env.SOLUTION_FILE_PATH}}
+
+      - name: Build x86
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=x86 ${{env.SOLUTION_FILE_PATH}}
+        continue-on-error: true
+
+      - name: Build x64
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=x64 ${{env.SOLUTION_FILE_PATH}}
+        continue-on-error: true
+
+      - name: Build ARM64EC
+        working-directory: ${{env.GITHUB_WORKSPACE}}
+        run: msbuild /m /p:Configuration=${{env.BUILD_CONFIGURATION}} /p:Platform=arm64ec ${{env.SOLUTION_FILE_PATH}}
+        continue-on-error: true
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Build-Artifacts
+          path: |
+            ${{ env.GITHUB_WORKSPACE }}/build/x86/Release/RemoteFingerUnlockModule.dll
+            ${{ env.GITHUB_WORKSPACE }}/build/x64/Release/RemoteFingerUnlockModule.dll
+            ${{ env.GITHUB_WORKSPACE }}/build/arm64ec/Release/RemoteFingerUnlockModule.dll
