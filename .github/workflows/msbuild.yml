@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-2022
     strategy:
       matrix:
-      platform: [Win32, x64, ARM64EC] # Add ARM64EC to the build matrix
+        platform: [Win32, x64, ARM64EC] # Add ARM64EC to the build matrix
 
     steps:
       - name: Checkout repository
