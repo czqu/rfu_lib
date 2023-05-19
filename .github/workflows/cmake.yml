@@ -25,14 +25,14 @@ jobs:
       - name: Install CMake and Ninja
         run: choco install -y cmake ninja
       - name: ls
-        run: ls-al
+        run: ls
       - name: Create build directory
         run: |
           mkdir -p ${{ github.workspace }}/build
           cd ${{ github.workspace }}/build
 
       - name: Configure CMake
-        run: cmake -G "Ninja" ..
+        run: cmake -G "Ninja" 
 
       - name: Build
         run: cmake --build .
