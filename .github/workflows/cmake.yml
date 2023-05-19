@@ -26,27 +26,17 @@ jobs:
       - name: Install CMake and Ninja
         run: choco install -y cmake ninja
 
-      - name: Create build directory
-        run: |
-          mkdir -p ${{ github.workspace }}/build
-          cd ${{ github.workspace }}/build
-
       - name: Configure CMake
         run: cmake -G "Ninja" 
 
       - name: Build
         run: cmake --build .
 
-      - name: Move Build Artifacts
-        run: |
-            mkdir -p ${{ github.workspace }}/build
-            mv libPasswordProvider_arm64.dll ${{ github.workspace }}/build/
-            mv libPasswordProvider_x64.dll ${{ github.workspace }}/build/
-            mv libPasswordProvider_x86.dll ${{ github.workspace }}/build/
-            
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
             name: PasswordProvider
             path: |
-                 ${{ env.GITHUB_WORKSPACE }}/build/
+                 ${{ env.GITHUB_WORKSPACE }}/libPasswordProvider_arm64.dll
+                 ${{ env.GITHUB_WORKSPACE }}/libPasswordProvider_x64.dll
+                 ${{ env.GITHUB_WORKSPACE }}/libPasswordProvider_x86.dll
