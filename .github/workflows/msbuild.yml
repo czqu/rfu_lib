@@ -27,27 +27,38 @@ jobs:
         working-directory: ${{env.GITHUB_WORKSPACE}}
         run: nuget restore ${{env.SOLUTION_FILE_PATH}}
 
-      - name: Build x86
+      # - name: Build x86
+      #   working-directory: ${{env.GITHUB_WORKSPACE}}
+      #   run: msbuild /m /p:Configuration=Release /p:Platform=Win32 RemoteFingerUnlock.sln
+      #   continue-on-error: false
+
+      # - name: Build x64
+      #   working-directory: ${{env.GITHUB_WORKSPACE}}
+      #   run: msbuild /m /p:Configuration=Release /p:Platform=x64 RemoteFingerUnlock.sln
+      #   continue-on-error: false
+
+      # - name: Build ARM64EC
+      #   working-directory: ${{env.GITHUB_WORKSPACE}}
+      #   run: msbuild /m /p:Configuration=Release /p:Platform=ARM64EC RemoteFingerUnlock.sln
+      #   continue-on-error: false
+    
+      - name: Build ${{ matrix.platform }} # Use a generic build step that depends on the matrix platform parameter
         working-directory: ${{env.GITHUB_WORKSPACE}}
-        run: msbuild /m /p:Configuration=Release /p:Platform=Win32 RemoteFingerUnlock.sln
+        run: msbuild /m /p:Configuration=Release /p:Platform=${{ matrix.platform }} /p:OutDir=${{env.GITHUB_WORKSPACE}}/build/${{ matrix.platform }}/Release/ RemoteFingerUnlock.sln # Specify the platform and output path for each build
         continue-on-error: false
 
-      - name: Build x64
-        working-directory: ${{env.GITHUB_WORKSPACE}}
-        run: msbuild /m /p:Configuration=Release /p:Platform=x64 RemoteFingerUnlock.sln
-        continue-on-error: false
-
-      - name: Build ARM64EC
-        working-directory: ${{env.GITHUB_WORKSPACE}}
-        run: msbuild /m /p:Configuration=Release /p:Platform=ARM64EC RemoteFingerUnlock.sln
-        continue-on-error: false
-
-        
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2 # Use v2 instead of v3
         with:
-          name: Build-Artifacts
+          name: Build-Artifacts-${{ matrix.platform }} # Specify the artifact name for each platform
           path: |
-            ${{ env.GITHUB_WORKSPACE }}/build/x86/Release/RemoteFingerUnlockModule.dll
-            ${{ env.GITHUB_WORKSPACE }}/build/x64/Release/RemoteFingerUnlockModule.dll
-            ${{ env.GITHUB_WORKSPACE }}/build/arm64ec/Release/RemoteFingerUnlockModule.dll
+            ${{ env.GITHUB_WORKSPACE }}/build/${{ matrix.platform }}/Release/RemoteFingerUnlockModule.dll # Specify the output path for each platform
+        
+      # - name: Upload Artifacts
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: Build-Artifacts
+      #     path: |
+      #       ${{ env.GITHUB_WORKSPACE }}/build/x86/Release/RemoteFingerUnlockModule.dll
+      #       ${{ env.GITHUB_WORKSPACE }}/build/x64/Release/RemoteFingerUnlockModule.dll
+      #       ${{ env.GITHUB_WORKSPACE }}/build/arm64ec/Release/RemoteFingerUnlockModule.dll
