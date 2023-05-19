@@ -52,7 +52,7 @@ jobs:
         with:
           name: Build-Artifacts-${{ matrix.platform }} # Specify the artifact name for each platform
           path: |
-            ${{ env.GITHUB_WORKSPACE }}/build/${{ matrix.platform }}/Release/RemoteFingerUnlockModule.dll # Specify the output path for each platform
+            ${{ env.GITHUB_WORKSPACE }}/build/
         
       # - name: Upload Artifacts
       #   uses: actions/upload-artifact@v3
