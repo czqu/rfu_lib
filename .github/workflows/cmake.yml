@@ -1,0 +1,28 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          repository: voidbytes/PassowrdProvider
+          token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
+          ref: main
+
+       - name: Create build directory
+        run: |
+          mkdir -p ${{ github.workspace }}/build
+          cd ${{ github.workspace }}/build
+          cmake ..
+        
+      - name: Build
+        run: |
+          cmake --build ${{ github.workspace }}/build --target all -j 18

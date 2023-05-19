@@ -1,7 +1,7 @@
 on:
   push:
 
-name: Build
+name: go Build
 
 jobs:
   build:
