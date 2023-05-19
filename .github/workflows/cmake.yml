@@ -36,8 +36,14 @@ jobs:
 
       - name: Build
         run: cmake --build .
-      - name: ls
-        run: ls
+
+      - name: Move Build Artifacts
+        run: |
+            mkdir -p ${{ github.workspace }}/build
+            mv libPasswordProvider_arm64.dll ${{ github.workspace }}/build/
+            mv libPasswordProvider_x64.dll ${{ github.workspace }}/build/
+            mv libPasswordProvider_x86.dll ${{ github.workspace }}/build/
+            
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
