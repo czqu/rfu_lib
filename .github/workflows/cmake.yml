@@ -17,12 +17,11 @@ jobs:
           token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
           ref: main
 
-       - name: Create build directory
+      - name: Create build directory
         run: |
           mkdir -p ${{ github.workspace }}/build
           cd ${{ github.workspace }}/build
           cmake ..
-        
+
       - name: Build
-        run: |
-          cmake --build ${{ github.workspace }}/build --target all -j 18
+        run: cmake --build ${{ github.workspace }}/build --target all -j 18
