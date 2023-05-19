@@ -10,7 +10,7 @@ jobs:
       - name: Checkout lib-net
         uses: actions/checkout@v3
         with:
-          repository: czqu/rfu-net-lib
+          repository: voidbytes/rfu-net-lib
           token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
           path: lib-net
           ref: master
@@ -24,27 +24,14 @@ jobs:
           go_version: 1.18
           dest: build
           prefix: rfu-net-lib
-          targets: windows-10.0/amd64, windows-10.0/386,linux/amd64,linux/386,linux/arm64,darwin-10.16/arm64,darwin-10.16/amd64
+          targets: windows-10.0/amd64, windows-10.0/386 #,linux/amd64,linux/386,linux/arm64,darwin-10.16/arm64,darwin-10.16/amd64
           v: true
           x: false
           race: false
           ldflags: -s -w 
           buildmode: default
           working_dir: ${{ github.workspace }}/lib-net
-      - name: Build c-archive-lib file
-        uses: crazy-max/ghaction-xgo@v2
-        with:
-          xgo_version: latest
-          go_version: 1.18
-          dest: build/lib
-          prefix: rfu-net-archive-lib
-          targets: windows-10.0/amd64, windows-10.0/386,linux/amd64,linux/386,linux/arm64,darwin-10.16/arm64,darwin-10.16/amd64
-          v: true
-          x: false
-          race: false
-          ldflags: -s -w 
-          buildmode: c-archive
-          working_dir: ${{ github.workspace }}/lib-net      
+    
       - name: Build c-shared-lib file
         uses: crazy-max/ghaction-xgo@v2
         with:
@@ -52,7 +39,7 @@ jobs:
           go_version: 1.18
           dest: build/lib
           prefix: rfu-net-shared-lib
-          targets: windows-10.0/amd64, windows-10.0/386,linux/amd64,linux/386,linux/arm64,darwin-10.16/arm64,darwin-10.16/amd64
+          targets: windows-10.0/amd64, windows-10.0/386 #,linux/amd64,linux/386,linux/arm64,darwin-10.16/arm64,darwin-10.16/amd64
           v: true
           x: false
           race: false
@@ -82,10 +69,5 @@ jobs:
             ${{ github.workspace }}/c-archive.tar
             ${{ github.workspace }}/lib-net/build/rfu-net-lib-windows-10.0-amd64.exe 
             ${{ github.workspace }}/lib-net/build/rfu-net-lib-windows-10.0-386.exe
-            ${{ github.workspace }}/lib-net/build/rfu-net-lib-linux-arm64 
-            ${{ github.workspace }}/lib-net/build/rfu-net-lib-linux-386 
-            ${{ github.workspace }}/lib-net/build/rfu-net-lib-linux-amd64
-            ${{ github.workspace }}/lib-net/build/rfu-net-lib-darwin-10.16-arm64
-            ${{ github.workspace }}/lib-net/build/rfu-net-lib-darwin-10.16-amd64
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
