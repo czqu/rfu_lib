@@ -43,6 +43,4 @@ jobs:
         with:
             name: PasswordProvider
             path: |
-                 ${{ github.workspace }}/build/PasswordProvider_arm64.dll
-                 ${{ github.workspace }}/build/PasswordProvider_x86.dll
-                 ${{ github.workspace }}/build/PasswordProvider_x64.dll
+                 ${{ env.GITHUB_WORKSPACE }}/build/
