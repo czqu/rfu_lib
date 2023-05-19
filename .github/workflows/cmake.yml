@@ -1,4 +1,4 @@
-name: Build
+name: cmake
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout repository
@@ -17,11 +17,16 @@ jobs:
           token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
           ref: main
 
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v1.1
+
       - name: Create build directory
         run: |
-          mkdir -p ${{ github.workspace }}/build
+          mkdir ${{ github.workspace }}/build
           cd ${{ github.workspace }}/build
-          cmake ..
+
+      - name: Configure CMake
+        run: cmake -S ${{ github.workspace }} -B ${{ github.workspace }}/build
 
       - name: Build
-        run: cmake --build ${{ github.workspace }}/build --target all -j 18
+        run: cmake --build ${{ github.workspace }}/build --config Release
