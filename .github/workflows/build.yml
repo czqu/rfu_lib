@@ -33,7 +33,7 @@ jobs:
           ldflags: -s -w 
           buildmode:  c-shared
           working_dir: ${{ github.workspace }}/           
-      - name: Upload lib artifact
+      - name: Upload lib artifact 386
         uses: actions/upload-artifact@v3
         with:
           name: Lib-artifact 386
@@ -41,8 +41,8 @@ jobs:
       - name: Upload lib artifact x64
         uses: actions/upload-artifact@v3
         with:
-          name: Lib-artifact 386
-          path: ${{ github.workspace }}/build/libNetwork-amd64.dll         
+          name: Lib-artifact x64
+          path: ${{ github.workspace }}/build/libNetwork-windows-amd64.dll         
       # - name: Archive file
       #   run:  tar cvf $GITHUB_WORKSPACE/c-archive.tar -C $GITHUB_WORKSPACE/lib-net/build/lib .
       #   if: startsWith(github.ref, 'refs/tags/') 
