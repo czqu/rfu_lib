@@ -48,7 +48,7 @@ jobs:
         continue-on-error: false
 
       - name: lsall
-        run:  ls
+        run:  ls ${{ env.GITHUB_WORKSPACE }}/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2 # Use v2 instead of v3

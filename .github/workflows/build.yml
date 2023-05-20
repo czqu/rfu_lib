@@ -1,12 +1,12 @@
-on:
-  push:
-
+on: 
+  push
 name: go Build
-
 jobs:
   build:
-    runs-on: ubuntu-latest
-
+    runs-on: windows-2022
+    strategy:
+      matrix:
+        platform: [386, amd64, arm64]
     steps:
       - name: Checkout lib-net
         uses: actions/checkout@v3
@@ -14,24 +14,17 @@ jobs:
           repository: voidbytes/rfu-net-lib
           token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
           path: lib-net
-          ref: master
-
-      - name: Pull xgo image
-        run: docker pull karalabe/xgo-latest # Pull the latest xgo image from Docker Hub
-
+          ref: dev
       - name: Build c-shared-lib file
-        run: docker run --rm -v ${{ github.workspace }}:/source karalabe/xgo-latest --targets windows-10.0/amd64,windows-10.0/386,windows-10.0/arm64 --ldflags "-s -w" --buildmode=c-shared /source/lib-net # Use docker run to invoke xgo and specify the target platforms and build options
-
+        run: CGO_ENABLED=1 GOOS=windows GOARCH=${{ matrix.platform }} go build -buildmode=c-shared -x -v -ldflags "-s -w" -o ${{ github.workspace }}/lib-net/build/lib/lib-net-${{ matrix.platform }}.dll /source/lib-net # Use go build to compile the shared library for each platform
       - name: Upload lib artifact
         uses: actions/upload-artifact@v3
         with:
           name: Lib-artifact
           path: ${{ github.workspace }}/lib-net/build/lib/**/*
-
       - name: Archive file
         run: tar cvf $GITHUB_WORKSPACE/c-archive.tar -C $GITHUB_WORKSPACE/lib-net/build/lib .
         if: startsWith(github.ref, 'refs/tags/')
-
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
