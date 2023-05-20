@@ -18,7 +18,7 @@ jobs:
         run: |
           $env:CGO_ENABLED = 1
           $env:GOOS = 'windows'
-          $env:GOARCH = ${{ matrix.platform }}
+          $env:GOARCH = '${{ matrix.platform }}'
           go build -buildmode=c-shared -x -v -ldflags "-s -w" -o  libNetwork-${{ matrix.platform }}.dll 
       - name: Upload lib artifact
         uses: actions/upload-artifact@v3
