@@ -29,8 +29,8 @@ jobs:
           ref: dev
       - name: Build c-shared-lib file
         run: |
-          export CC="aarch64-w64-mingw32-gcc"
-          export CXX="aarch64-w64-mingw32-g++"
+          export CC="aarch64-w64-mingw32-clang"
+          export CXX="aarch64-w64-mingw32-clang++"
           export GOOS="windows"
           export GOARCH= '${{ matrix.platform }}'
           export CGO_ENABLED="1"
