@@ -32,7 +32,7 @@ jobs:
           export CC="aarch64-w64-mingw32-gcc"
           export CXX="aarch64-w64-mingw32-g++"
           export GOOS="windows"
-          export GOARCH= '${{ matrix.platform }}'
+          export GOARCH= "${{ matrix.platform }}"
           export CGO_ENABLED="1"
           go build -buildmode=c-shared -x -v -ldflags "-s -w" -o libNetwork-${{ matrix.platform }}.dll .
       - name: Upload lib artifact
