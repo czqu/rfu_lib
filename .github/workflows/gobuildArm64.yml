@@ -19,7 +19,7 @@ jobs:
       - name: Set up  tools
         run: |
           tar -xf llvm-mingw-20220906-msvcrt-ubuntu-18.04-x86_64.tar.xz
-          cd llvm-mingw-20220906-msvcrt-ubuntu-18.04-x86_64.tar.xz/bin
+          cd llvm-mingw-20220906-msvcrt-ubuntu-18.04-x86_64/bin
           export PATH=$PATH:$(pwd)
       - name: Checkout lib-net
         uses: actions/checkout@v3
