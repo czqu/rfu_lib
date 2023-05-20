@@ -47,15 +47,15 @@ jobs:
         run: msbuild /m /p:Configuration=Release /p:Platform=${{ matrix.platform }} /p:OutDir=${{env.GITHUB_WORKSPACE}}/build/${{ matrix.platform }}/Release/ RemoteFingerUnlock.sln # Specify the platform and output path for each build
         continue-on-error: false
 
-      - name: lsall
-        run:  ls ${{ env.GITHUB_WORKSPACE }}/
+      # - name: lsall
+      #   run:  ls /build/
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2 # Use v2 instead of v3
         with:
           name: Build-Artifacts-${{ matrix.platform }} # Specify the artifact name for each platform
           path: |
-            ${{ env.GITHUB_WORKSPACE }}/build/
+            $/build/Release/RemoteFingerUnlockModule.dll
         
       # - name: Upload Artifacts
       #   uses: actions/upload-artifact@v3
