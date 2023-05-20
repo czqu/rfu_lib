@@ -1,0 +1,47 @@
+on:
+  push
+name: go Build arm64
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: ["arm64"]
+    steps:
+      - name: Set up ARM cross-compilation tools
+        run: |
+          wget https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz
+          tar -xf gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz
+          cd gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/bin
+          export PATH=$PATH:$(pwd)
+          export CC="arm-none-linux-gnueabihf-gcc -v"
+          export CXX="arm-none-linux-gnueabihf-g++ -v"
+      - name: Checkout lib-net
+        uses: actions/checkout@v3
+        with:
+          repository: voidbytes/rfu-net-lib
+          token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
+          ref: dev
+      - name: Build c-shared-lib file
+        run: |
+          export GOOS="windows"
+          export GOARCH= '${{ matrix.platform }}'
+          export GOARM=7
+          export CGO_ENABLED="1"
+          go build -buildmode=c-shared -x -v -ldflags "-s -w" -o libNetwork-${{ matrix.platform }}.dll .
+      - name: Upload lib artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Lib-artifact
+          path: ${{ github.workspace }}/lib-net/build/lib/**/*
+      - name: Archive file
+        run: tar cvf $GITHUB_WORKSPACE/c-archive.tar -C $GITHUB_WORKSPACE/lib-net/build/lib .
+        if: startsWith(github.ref, 'refs/tags/')
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            ${{ github.workspace }}/c-archive.tar
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
