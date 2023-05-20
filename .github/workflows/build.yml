@@ -16,7 +16,11 @@ jobs:
           path: lib-net
           ref: dev
       - name: Build c-shared-lib file
-        run: CGO_ENABLED=1 GOOS=windows GOARCH=${{ matrix.platform }} go build -buildmode=c-shared -x -v -ldflags "-s -w" -o ${{ github.workspace }}/lib-net/build/lib/lib-net-${{ matrix.platform }}.dll /source/lib-net # Use go build to compile the shared library for each platform
+        run: |
+          $env:CGO_ENABLED = 1
+          $env:GOOS = 'windows'
+          $env:GOARCH = ${{ matrix.platform }}
+          go build -buildmode=c-shared -x -v -ldflags "-s -w" -o ${{ github.workspace }}/lib-net/build/lib/lib-net-${{ matrix.platform }}.dll /source/lib-net # Use go build to compile the shared library for each platform
       - name: Upload lib artifact
         uses: actions/upload-artifact@v3
         with:
