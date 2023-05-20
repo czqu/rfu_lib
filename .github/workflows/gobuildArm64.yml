@@ -3,7 +3,7 @@ on:
 name: go Build arm64
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         platform: ["arm64"]
@@ -18,8 +18,8 @@ jobs:
 
       - name: Set up  tools
         run: |
-          tar -xf llvm-mingw-20220906-msvcrt-ubuntu-18.04-x86_64.tar.xz
-          cd llvm-mingw-20220906-msvcrt-ubuntu-18.04-x86_64/bin
+          tar -xf llvm-mingw-20230517-ucrt-ubuntu-20.04-x86_64.tar.xz
+          cd llvm-mingw-20230517-ucrt-ubuntu-20.04-x86_64/bin
           export PATH=$PATH:$(pwd)
       - name: Checkout lib-net
         uses: actions/checkout@v3
