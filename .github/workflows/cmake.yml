@@ -32,11 +32,24 @@ jobs:
       - name: Build
         run: cmake --build .
 
-      - name: Upload Artifact
+      - name: Upload Artifact amd64
+        uses: actions/upload-artifact@v2
+        with:
+            name: PasswordProvider
+            path: |
+
+                 libPasswordProvider_x64.dll
+
+      - name: Upload Artifact arm64
         uses: actions/upload-artifact@v2
         with:
             name: PasswordProvider
             path: |
                  libPasswordProvider_arm64.dll
-                 libPasswordProvider_x64.dll
-                 libPasswordProvider_x86.dll
+
+      - name: Upload Artifact x86
+        uses: actions/upload-artifact@v2
+        with:
+            name: PasswordProvider
+            path: |
+                 libPasswordProvider_x86.dll           
