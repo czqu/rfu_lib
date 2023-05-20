@@ -8,14 +8,19 @@ jobs:
       matrix:
         platform: ["arm64"]
     steps:
-      - name: Set up ARM cross-compilation tools
+      - name:  download llvm-mingw
+        uses: dsaltares/fetch-gh-release-asset@master
+        with:
+           repo: 'mstorsjo/llvm-mingw'
+           version: 'tags/20220906'
+           file: 'llvm-mingw-20220906-msvcrt-ubuntu-18.04-x86_64.tar.xz'
+           token: ${{ secrets.GH_PAT }}
+
+      - name: Set up  tools
         run: |
-          wget https://developer.arm.com/-/media/Files/downloads/gnu-a/10.3-2021.07/binrel/gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz
-          tar -xf gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf.tar.xz
-          cd gcc-arm-10.3-2021.07-x86_64-arm-none-linux-gnueabihf/bin
+          tar -xf llvm-mingw-20220906-msvcrt-ubuntu-18.04-x86_64.tar.xz
+          cd llvm-mingw-20220906-msvcrt-ubuntu-18.04-x86_64.tar.xz/bin
           export PATH=$PATH:$(pwd)
-          export CC="arm-none-linux-gnueabihf-gcc -v"
-          export CXX="arm-none-linux-gnueabihf-g++ -v"
       - name: Checkout lib-net
         uses: actions/checkout@v3
         with:
@@ -24,9 +29,10 @@ jobs:
           ref: dev
       - name: Build c-shared-lib file
         run: |
+          export CC="aarch64-w64-mingw32-gcc"
+          export CXX="aarch64-w64-mingw32-g++"
           export GOOS="windows"
           export GOARCH= '${{ matrix.platform }}'
-          export GOARM=7
           export CGO_ENABLED="1"
           go build -buildmode=c-shared -x -v -ldflags "-s -w" -o libNetwork-${{ matrix.platform }}.dll .
       - name: Upload lib artifact
