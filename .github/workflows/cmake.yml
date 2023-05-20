@@ -35,7 +35,7 @@ jobs:
       - name: Upload Artifact amd64
         uses: actions/upload-artifact@v2
         with:
-            name: PasswordProvider
+            name: PasswordProvider_x64
             path: |
 
                  libPasswordProvider_x64.dll
@@ -43,13 +43,13 @@ jobs:
       - name: Upload Artifact arm64
         uses: actions/upload-artifact@v2
         with:
-            name: PasswordProvider
+            name: PasswordProvider_arm64
             path: |
                  libPasswordProvider_arm64.dll
 
       - name: Upload Artifact x86
         uses: actions/upload-artifact@v2
         with:
-            name: PasswordProvider
+            name: PasswordProvider_x86
             path: |
                  libPasswordProvider_x86.dll           
