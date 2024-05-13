@@ -12,8 +12,8 @@ jobs:
         uses: dsaltares/fetch-gh-release-asset@master
         with:
            repo: 'mstorsjo/llvm-mingw'
-           version: 'tags/20230517'
-           file: 'llvm-mingw-20230517-ucrt-ubuntu-20.04-x86_64.tar.xz'
+           version: 'tags/20240502'
+           file: 'llvm-mingw-20240502-ucrt-ubuntu-20.04-x86_64.tar.xz'
            token: ${{ secrets.GH_PAT }}
 
       - name: Set up  tools

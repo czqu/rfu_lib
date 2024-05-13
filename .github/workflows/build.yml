@@ -1,56 +1,57 @@
-
+name: build dev 
 on:
-  push:
-
-name: go Build x86 x64
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout lib-net
-        uses: actions/checkout@v3
-        with:
-          repository: voidbytes/rfu-net-lib
-          token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
-          ref: master
-     # - uses: actions/setup-go@v2
-      #  with:
-       #   go-version: "1.18"
-
+    repository_dispatch:
+        types: [build]
+    push:
+        branches:
+            - 'main'
     
-      - name: Build c-shared-lib file
-        uses: crazy-max/ghaction-xgo@v2
-        with:
-          xgo_version: latest
-          go_version: latest
-          dest: build/
-          prefix: libNetwork
-          targets: windows-10.0/amd64, windows-10.0/386  #,linux/amd64,linux/386,linux/arm64,darwin-10.16/arm64,darwin-10.16/amd64
-          v: true
-          x: false
-          race: false
-          ldflags: -s -w 
-          buildmode:  c-shared
-          working_dir: ${{ github.workspace }}/           
-      - name: Upload lib artifact 386
-        uses: actions/upload-artifact@v3
-        with:
-          name: Lib-artifact 386
-          path: ${{ github.workspace }}/build/libNetwork-windows-386.dll             
-      - name: Upload lib artifact x64
-        uses: actions/upload-artifact@v3
-        with:
-          name: Lib-artifact x64
-          path: ${{ github.workspace }}/build/libNetwork-windows-amd64.dll         
-      # - name: Archive file
-      #   run:  tar cvf $GITHUB_WORKSPACE/c-archive.tar -C $GITHUB_WORKSPACE/lib-net/build/lib .
-      #   if: startsWith(github.ref, 'refs/tags/') 
-      # - name: Release
-      #   uses: softprops/action-gh-release@v1
-      #   if: startsWith(github.ref, 'refs/tags/') 
-      #   with:
-      #     files: |
-      #       ${{ github.workspace }}/c-archive.tar
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+jobs:
+    build:
+      runs-on: ubuntu-20.04
+      steps:
+        - name:  download llvm-mingw
+          uses: dsaltares/fetch-gh-release-asset@master
+          with:
+             repo: 'mstorsjo/llvm-mingw'
+             version: 'tags/20240502'
+             file: 'llvm-mingw-20240502-ucrt-ubuntu-20.04-x86_64.tar.xz'
+             token: ${{ secrets.GH_PAT }}
+  
+        - name: Set up  tools
+          run: |
+            tar -xf llvm-mingw-20240502-ucrt-ubuntu-20.04-x86_64.tar.xz
+            cd llvm-mingw-20240502-ucrt-ubuntu-20.04-x86_64/bin
+            export PATH=$PATH:$(pwd)
+        - name: Checkout lib-net
+          uses: actions/checkout@v4
+          with:
+            repository: voidbytes/rfu-net-lib
+            token: ${{ secrets.GH_PAT }}  
+            ref: dev
+            path: rfu-net-lib
+        - name: Setup go
+          uses: actions/setup-go@v5
+          with:
+              go-version:  "1.22.3"
+  
+        - name: Build c-shared-lib file
+          run: cd $GITHUB_WORKSPACE/rfu-net-lib/ && sh  build-linux.sh
+        - name: Archive file
+          run: tar cvf $GITHUB_WORKSPACE/NetExtension.tar -C $GITHUB_WORKSPACE/rfu-net-lib/out .
+        - name: Upload lib artifact
+          uses: actions/upload-artifact@v3
+          with:
+            name: NetExtension
+            path: ${{ github.workspace }}/NetExtension.tar
+
+        #   if: startsWith(github.ref, 'refs/tags/')
+        # - name: Release
+        #   uses: softprops/action-gh-release@v1
+        #   if: startsWith(github.ref, 'refs/tags/')
+        #   with:
+        #     files: |
+        #       ${{ github.workspace }}/c-archive.tar
+        #   env:
+        #     GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+  
