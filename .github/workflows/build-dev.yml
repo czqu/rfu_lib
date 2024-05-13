@@ -34,8 +34,9 @@ jobs:
           uses: actions/setup-go@v5
           with:
               go-version:  "1.22.3"
-  
-        - name: Build c-shared-lib file
+        - name: Build test
+          run: cd $GITHUB_WORKSPACE/rfu-net-lib/ && CGO_ENABLED=1  CC=x86_64-w64-mingw32-clang CXX=x86_64-w64-mingw32-clang++  GOOS=windows GOARCH=amd64 go build -buildmode=c-shared -x -v -ldflags "-s -w" -o ./out/x64/NetExtension.dll
+        - name: Build dll file
           run: cd $GITHUB_WORKSPACE/rfu-net-lib/ && sh  build-linux.sh
         - name: Archive file
           run: tar cvf $GITHUB_WORKSPACE/NetExtension.tar -C $GITHUB_WORKSPACE/rfu-net-lib/out .
