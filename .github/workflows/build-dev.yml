@@ -39,7 +39,7 @@ jobs:
            export CC="aarch64-w64-mingw32-clang"
            export CXX="aarch64-w64-mingw32-clang++"
            export GOOS="windows"
-           export GOARCH="${{ matrix.platform }}"
+           export GOARCH="arm64"
            export CGO_ENABLED="1"
            cd $GITHUB_WORKSPACE/rfu-net-lib/ 
            go build -buildmode=c-shared -x -v -ldflags "-s -w" 
