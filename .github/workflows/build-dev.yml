@@ -42,7 +42,7 @@ jobs:
            export GOARCH="${{ matrix.platform }}"
            export CGO_ENABLED="1"
            cd $GITHUB_WORKSPACE/rfu-net-lib/ 
-           go build -buildmode=c-shared -x -v -ldflags "-s -w" -o ./out/x64/NetExtension.dll
+           go build -buildmode=c-shared -x -v -ldflags "-s -w" 
         - name: Build dll file
           run: cd $GITHUB_WORKSPACE/rfu-net-lib/ && sh  build-linux.sh
         - name: Archive file
