@@ -21,7 +21,6 @@ jobs:
         - name: Set up  tools
           run: |
             tar -xf llvm-mingw-20240502-ucrt-ubuntu-20.04-x86_64.tar.xz
-            cd llvm-mingw-20240502-ucrt-ubuntu-20.04-x86_64/bin
            
         - name: Checkout lib-net
           uses: actions/checkout@v4
@@ -36,7 +35,7 @@ jobs:
               go-version:  "1.22.3"
         - name: Build dll file
           run: |
-            export LLVM_PATH= $GITHUB_WORKSPACE/llvm-mingw-20240502-ucrt-ubuntu-20.04-x86_64/bin
+            export LLVM_PATH=$GITHUB_WORKSPACE/llvm-mingw-20240502-ucrt-ubuntu-20.04-x86_64/bin
             export PATH=$LLVM_PATH:$PATH
             cd $GITHUB_WORKSPACE/rfu-net-lib/
             bash  build-linux.sh
