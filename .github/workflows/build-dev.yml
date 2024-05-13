@@ -1,14 +1,14 @@
 name: build dev 
 on:
     repository_dispatch:
-        types: [build]
+        types: [build-dev]
     push:
         branches:
             - 'main'
     
 jobs:
     build:
-      runs-on: ubuntu-20.04
+      runs-on: ubuntu-22.04
       steps:
         - name:  download llvm-mingw
           uses: dsaltares/fetch-gh-release-asset@master
