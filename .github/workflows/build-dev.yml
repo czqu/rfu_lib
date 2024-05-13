@@ -39,13 +39,11 @@ jobs:
             export PATH=$LLVM_PATH:$PATH
             cd $GITHUB_WORKSPACE/rfu-net-lib/
             bash  build-linux.sh
-        - name: Archive file
-          run: tar cvf $GITHUB_WORKSPACE/NetExtension.tar -C $GITHUB_WORKSPACE/rfu-net-lib/out .
-        - name: Upload lib artifact
+        - name: Upload dll artifact
           uses: actions/upload-artifact@v3
           with:
             name: NetExtension
-            path: ${{ github.workspace }}/NetExtension.tar
+            path: ${{ github.workspace }}/rfu-net-lib/out/**/*
 
         #   if: startsWith(github.ref, 'refs/tags/')
         # - name: Release
