@@ -34,17 +34,10 @@ jobs:
           uses: actions/setup-go@v5
           with:
               go-version:  "1.22.3"
-        - name: Build test
-          run: |
-           export CC="aarch64-w64-mingw32-clang"
-           export CXX="aarch64-w64-mingw32-clang++"
-           export GOOS="windows"
-           export GOARCH="arm64"
-           export CGO_ENABLED="1"
-           cd $GITHUB_WORKSPACE/rfu-net-lib/ 
-           go build -buildmode=c-shared -x -v -ldflags "-s -w" 
         - name: Build dll file
-          run: cd $GITHUB_WORKSPACE/rfu-net-lib/ && sh  build-linux.sh
+          run: |
+            cd $GITHUB_WORKSPACE/rfu-net-lib/
+            bash  build-linux.sh
         - name: Archive file
           run: tar cvf $GITHUB_WORKSPACE/NetExtension.tar -C $GITHUB_WORKSPACE/rfu-net-lib/out .
         - name: Upload lib artifact
