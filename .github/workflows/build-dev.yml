@@ -35,20 +35,10 @@ jobs:
             export LLVM_PATH=$GITHUB_WORKSPACE/llvm-mingw-20240502-ucrt-ubuntu-20.04-x86_64/bin
             export PATH=$LLVM_PATH:$PATH
             cd $GITHUB_WORKSPACE/rfu-net-lib/
-            bash  build-linux.sh
+            bash  build-linux.sh debug
         - name: Upload dll artifact
           uses: actions/upload-artifact@v3
           with:
             name: NetExtension
             path: ${{ github.workspace }}/rfu-net-lib/out/**/*
-
-        #   if: startsWith(github.ref, 'refs/tags/')
-        # - name: Release
-        #   uses: softprops/action-gh-release@v1
-        #   if: startsWith(github.ref, 'refs/tags/')
-        #   with:
-        #     files: |
-        #       ${{ github.workspace }}/c-archive.tar
-        #   env:
-        #     GITHUB_TOKEN: ${{ secrets.GH_PAT }}
   
