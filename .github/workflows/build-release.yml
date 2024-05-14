@@ -1,7 +1,7 @@
 name: build dev 
 on:
     repository_dispatch:
-        types: [build-dev]
+        types: [build-release]
     
 jobs:
     build:
@@ -24,7 +24,7 @@ jobs:
           with:
             repository: voidbytes/rfu-net-lib
             token: ${{ secrets.GH_PAT }}  
-            ref: dev
+            ref: master
             path: rfu-net-lib
         - name: Setup go
           uses: actions/setup-go@v5
@@ -39,16 +39,5 @@ jobs:
         - name: Upload dll artifact
           uses: actions/upload-artifact@v3
           with:
-            name: NetExtension
+            name: NetExtension-release
             path: ${{ github.workspace }}/rfu-net-lib/out/**/*
-
-        #   if: startsWith(github.ref, 'refs/tags/')
-        # - name: Release
-        #   uses: softprops/action-gh-release@v1
-        #   if: startsWith(github.ref, 'refs/tags/')
-        #   with:
-        #     files: |
-        #       ${{ github.workspace }}/c-archive.tar
-        #   env:
-        #     GITHUB_TOKEN: ${{ secrets.GH_PAT }}
-  
