@@ -24,7 +24,7 @@ jobs:
           with:
             repository: voidbytes/file-share-lib
             token: ${{ secrets.GH_PAT }}  
-            ref: dev
+            ref: master
             path: rfu-net-lib
         - name: Setup go
           uses: actions/setup-go@v5
