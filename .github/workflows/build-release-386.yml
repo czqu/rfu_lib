@@ -35,7 +35,7 @@ jobs:
             export LLVM_PATH=$GITHUB_WORKSPACE/llvm-mingw-20240502-ucrt-ubuntu-20.04-x86_64/bin
             export PATH=$LLVM_PATH:$PATH
             cd $GITHUB_WORKSPACE/FadaControl/cmd/core-service
-            bash  build-linux.sh
+            bash  build-linux-386.sh
         - name: Upload dll artifact
           uses: actions/upload-artifact@v3
           with:
