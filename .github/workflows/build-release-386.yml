@@ -32,7 +32,7 @@ jobs:
               go-version:  "1.22.3"
         - name: Build FadaControl
           run: |
-            export LLVM_PATH=$GITHUB_WORKSPACE/llvm-mingw-20240502-ucrt-ubuntu-20.04-x86_64/bin
+            export LLVM_PATH=$GITHUB_WORKSPACE/llvm-mingw-20240619-ucrt-ubuntu-20.04-x86_64/bin
             export PATH=$LLVM_PATH:$PATH
             cd $GITHUB_WORKSPACE/FadaControl/cmd/core-service
             bash  build-linux-386.sh
