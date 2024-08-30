@@ -1,0 +1,43 @@
+name: build release arm64
+on:
+    repository_dispatch:
+        types: [build-release-arm64]
+    
+jobs:
+    build:
+      runs-on: ubuntu-22.04
+      steps:
+        - name:  download llvm-mingw
+          uses: dsaltares/fetch-gh-release-asset@master
+          with:
+             repo: 'mstorsjo/llvm-mingw'
+             version: 'tags/20240619'
+             file: 'llvm-mingw-20240619-ucrt-ubuntu-20.04-aarch64.tar.xz'
+             token: ${{ secrets.GH_PAT }}
+  
+        - name: Set up  tools
+          run: |
+            tar -xf llvm-mingw-20240619-ucrt-ubuntu-20.04-aarch64.tar.xz
+           
+        - name: Checkout FadaControl
+          uses: actions/checkout@v4
+          with:
+            repository: voidbytes/FadaControl
+            token: ${{ secrets.GH_PAT }}  
+            ref: main
+            path: FadaControl
+        - name: Setup go
+          uses: actions/setup-go@v5
+          with:
+              go-version:  "1.22.3"
+        - name: Build FadaControl
+          run: |
+            export LLVM_PATH=$GITHUB_WORKSPACE/llvm-mingw-20240619-ucrt-ubuntu-20.04-aarch64/bin
+            export PATH=$LLVM_PATH:$PATH
+            cd $GITHUB_WORKSPACE/FadaControl/cmd/core-service
+            bash  build-linux-arm64.sh
+        - name: Upload dll artifact
+          uses: actions/upload-artifact@v3
+          with:
+            name: FadaControl-release
+            path: ${{ github.workspace }}/FadaControl/out/**/*
