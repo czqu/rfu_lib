@@ -19,26 +19,26 @@ jobs:
           run: |
             tar -xf llvm-mingw-20240502-ucrt-ubuntu-20.04-x86_64.tar.xz
            
-        - name: Checkout lib-net
+        - name: Checkout FadaControl
           uses: actions/checkout@v4
           with:
-            repository: voidbytes/rfu-net-lib
+            repository: voidbytes/FadaControl
             token: ${{ secrets.GH_PAT }}  
             ref: dev
-            path: rfu-net-lib
+            path: FadaControl
         - name: Setup go
           uses: actions/setup-go@v5
           with:
               go-version:  "1.22.3"
-        - name: Build dll file
+        - name: Build exe file
           run: |
             export LLVM_PATH=$GITHUB_WORKSPACE/llvm-mingw-20240502-ucrt-ubuntu-20.04-x86_64/bin
             export PATH=$LLVM_PATH:$PATH
-            cd $GITHUB_WORKSPACE/rfu-net-lib/
-            bash  build-linux.sh debug
+            cd $GITHUB_WORKSPACE/FadaControl/
+            bash  build-linux.sh 
         - name: Upload dll artifact
           uses: actions/upload-artifact@v3
           with:
-            name: NetExtension
-            path: ${{ github.workspace }}/rfu-net-lib/out/**/*
+            name: FadaControl-dev
+            path: ${{ github.workspace }}/FadaControl/out/**/*
   
